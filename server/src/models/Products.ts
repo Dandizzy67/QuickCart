@@ -55,7 +55,7 @@ export interface IProduct {
   bundleProducts: Types.ObjectId[]; // "Frequently Bought Together" Product
   relatedProducts: Types.ObjectId[]; // "Related Products" (empty = same category)
   status: "published" | "draft" | "scheduled";
-  PublishedAt?: Date; // for "schedule": the product goes live at this time
+  publishedAt?: Date; // for "schedule": the product goes live at this time
 }
 
 const productSchema = new Schema<IProduct>(
@@ -96,7 +96,9 @@ const productSchema = new Schema<IProduct>(
 
     images: [{ type: String }],
 
-    gallery: [{ name: String, hex: String }],
+    gallery: [{ type: String }],
+
+    colors: [{ name: String, hex: String }],
 
     tags: [{ type: String }],
 
@@ -123,6 +125,7 @@ const productSchema = new Schema<IProduct>(
       enum: ["published", "draft", "scheduled"],
       default: "published",
     },
+    publishedAt: { type: Date },
   },
   { timestamps: true },
 );
@@ -137,10 +140,12 @@ const productSchema = new Schema<IProduct>(
 export const liveProducts = () => {
   return {
     $or: [
-      { status: "published" as const },
-      { status: "scheduled" as const, publishAt: { $lte: new Date() } },
+      { status: "published" },
+      { status: "scheduled", publishedAt: { $lte: new Date() } },
     ],
   };
 };
 
 export const Product = model<IProduct>("Product", productSchema);
+
+//Next: Step9 (Make web friendly name {slugs})-> server/src/utils/slugigy.ts
