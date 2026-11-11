@@ -5,7 +5,6 @@
 // "category" is a category slug; seed.ts swaps it for the real category id.
 // Prices are whole naira (45000 = ₦45,000).
 // Tags used by the Home page sections: featured, flash-deal, fast-deal, deal, new-arrival, recommended.
-
 import type {
   IProductColor,
   IProductHighlight,
