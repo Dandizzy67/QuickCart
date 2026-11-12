@@ -9,7 +9,7 @@ import type {
   IProductColor,
   IProductHighlight,
   IProductSpec,
-} from "../src/models/Products";
+} from "../models/Products";
 
 export type SeedProduct = {
   name: string;
@@ -476,7 +476,6 @@ export const products: SeedProduct[] = [
       "Botanical Radiance Elixir",
       "Scented Soy Candle Duo",
       "Eco Grip Yoga Mat",
-      "",
     ],
   },
   {

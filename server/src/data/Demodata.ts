@@ -2,10 +2,10 @@
 // Turns the demo data files (categories.ts, products.ts) into records shaped like the models, ready for seed.ts to save. Nothing here talks to MongoDb.
 
 import { Types } from "mongoose";
-import { PHOTO_FOLDER, photoUrl } from "../src/config/cloudinary";
+import { PHOTO_FOLDER, photoUrl } from "../config/cloudinary";
 import { categories } from "./category";
-import { products, SeedProduct } from "./product";
-import { slugify } from "../src/utils/slugify";
+import { products, type SeedProduct } from "./product";
+import { slugify } from "../utils/slugify";
 
 // STEP 12: Put the demo data in the database (part 1: shape the records)
 // the data files use slugs and simple names; the database needs real ids, full photo addressses and every field the model expects. these functions do that translation
