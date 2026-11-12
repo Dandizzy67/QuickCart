@@ -94,5 +94,34 @@ export const deleteAllUploadedPhotos = async () => {
     .delete_resources_by_prefix(`${UPLOAD_FOLDER}/`)
     .catch(() => {});
 };
- 
 
+// list the names (public ids ) of all demo product photos on cloudinary
+// e.g("Quickcart/products/smart-wath")
+
+export const listProductPhotoIds = async (): Promise<string[]> => {
+  if (!isCloudinaryReady) {
+    return [];
+  }
+
+  const ids: string[] = [];
+  let nextCursor: string | undefined = undefined;
+
+  do {
+    const page = await cloudinary.api.resources({
+      type: "upload",
+      prefix: `${PHOTO_FOLDER}/`,
+      max_results: 500,
+      next_cursor: nextCursor,
+    });
+
+    for (const photo of page.resources) {
+      ids.push(photo.public_id);
+    }
+
+    nextCursor = page.next_cursor; // undefined on the last page
+  } while (nextCursor);
+
+  return ids.filter((id) => {
+    return !id.startsWith(`${UPLOAD_FOLDER}`);
+  });
+}; 
