@@ -18,7 +18,7 @@ export const env = {
     process.env.MONGO_URI ||
     "mongodb+srv://aderinsoladaniel433_db_user:03ucClKr2L48ZorD@cluster0.e8kldlt.mongodb.net/Quickcart",
   jwSecret: process.env.JWT_SECRET || "dev-secret-change-me",
-  // jwExpiresIn:process.env.JWT_EXPIRES_IN || "15d", "remain logged in for 15days"
+  jwtExpiresIn: process.env.JWT_EXPIRES_IN || "15d",
   clientUrl: process.env.CLIENT_URL || "http://localhost:5173/",
 
   // // The hidden demo panel (reset the data, move orders along) for presentations.
@@ -35,4 +35,3 @@ export const env = {
   cloudinaryApiKey: process.env.CLOUDINARY_API_KEY || "",
   cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET || "",
 };
- 

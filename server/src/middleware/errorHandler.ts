@@ -21,7 +21,7 @@ export const errorHandler = (
       return field.message;
     });
 
-    return res.status(400).json({ messages: messages.join(" . ") });
+    return res.status(400).json({ message: messages.join(" . ") });
   }
 
   //   3. A badly formed id, e.g Get
