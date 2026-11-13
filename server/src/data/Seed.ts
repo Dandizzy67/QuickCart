@@ -7,7 +7,8 @@ import { connectDB } from "../config/database";
 import { listProductPhotoIds } from "../config/cloudinary";
 import { Category } from "../models/Category";
 import { Product } from "../models/Products";
-import { demoCategories, demoProducts } from "./Demodata";
+import { User } from "../models/user";
+import { demoCategories, demoProducts, demoUsers } from "./Demodata";
 import { products } from "./product";
 
 // STEP 13: the seed command
@@ -15,7 +16,11 @@ import { products } from "./product";
 
 export const seedDatabase = async () => {
   // 1. Empty the collections (both at the same time with Promise.all)
-  await Promise.all([Category.deleteMany({}), Product.deleteMany({})]);
+  await Promise.all([
+    Category.deleteMany({}),
+    Product.deleteMany({}),
+    User.deleteMany({}),
+  ]);
 
   // 2. Save the categories, then remember each one's id by slug: "electronics" -> ObjectId(...)
   const savedCategories = await Category.insertMany(demoCategories());
@@ -72,10 +77,15 @@ export const seedDatabase = async () => {
     }),
   );
 
-  // 6. A summary for whoever ran the seed
+  // 6. Save the demo users. User.create (NOT insertMany): only create/save runs the model's
+  // pre("save") hook, which hashes the passwords. insertMany would store them as plain text!
+  const savedUsers = await User.create(demoUsers());
+
+  // 7. A summary for whoever ran the seed
   return {
     categories: savedCategories.length,
     products: saveProducts.length,
+    users: savedUsers.length,
     withoutPhotos: saveProducts
       .filter((product) => {
         return product.images.length === 0;
@@ -93,7 +103,7 @@ const main = async () => {
     const result = await seedDatabase();
 
     console.log(
-      `Seeded ${result.categories} categories and ${result.products} products`,
+      `Seeded ${result.categories} categories, ${result.products} products and ${result.users} users`,
     );
 
     if (result.withoutPhotos.length > 0) {
