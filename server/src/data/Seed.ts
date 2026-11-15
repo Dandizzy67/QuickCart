@@ -10,6 +10,8 @@ import { Product } from "../models/Products";
 import { User } from "../models/user";
 import { demoCategories, demoProducts, demoUsers } from "./Demodata";
 import { products } from "./product";
+import { PromoCode } from "../models/promoCodes";
+import { promoCodes } from "./promoCodes";
 
 // STEP 13: the seed command
 // seedDatabase() does the work and is exported,
@@ -20,6 +22,7 @@ export const seedDatabase = async () => {
     Category.deleteMany({}),
     Product.deleteMany({}),
     User.deleteMany({}),
+    PromoCode.deleteMany({}),
   ]);
 
   // 2. Save the categories, then remember each one's id by slug: "electronics" -> ObjectId(...)
@@ -81,11 +84,15 @@ export const seedDatabase = async () => {
   // pre("save") hook, which hashes the passwords. insertMany would store them as plain text!
   const savedUsers = await User.create(demoUsers());
 
-  // 7. A summary for whoever ran the seed
+  // 7. Save the promo codes (insertMany is fine here: promo codes have no save hooks)
+  const savedPromoCodes = await PromoCode.insertMany(promoCodes);
+
+  // 8. A summary for whoever ran the seed
   return {
     categories: savedCategories.length,
     products: saveProducts.length,
     users: savedUsers.length,
+    promoCodes: savedPromoCodes.length,
     withoutPhotos: saveProducts
       .filter((product) => {
         return product.images.length === 0;
@@ -103,7 +110,7 @@ const main = async () => {
     const result = await seedDatabase();
 
     console.log(
-      `Seeded ${result.categories} categories, ${result.products} products and ${result.users} users`,
+      `Seeded ${result.categories} categories, ${result.products} products, ${result.users} users and ${result.promoCodes} promo codes`,
     );
 
     if (result.withoutPhotos.length > 0) {
