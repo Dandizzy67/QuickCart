@@ -3,9 +3,13 @@
 // photo with a badge, category, name, stars, price, and an "Add" button.
 //   <ProductCard product={product} />
 
+// Other Home rows change the badge and the line under the name (STEP 33):
+//   <ProductCard product={product} badge={{ label: "NEW", className: "bg-primary text-white" }} details={<p>...</p>} />
+
 // STEP 32 (part 7): The product card
 
 import { useState } from "react";
+import type { ReactNode } from "react";
 import { MdOutlineImageNotSupported } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useCart } from "../../context/cartContext";
@@ -22,13 +26,25 @@ const badgeColor = (badge: string) =>
       ? "bg-success text-white"
       : "bg-warning text-white";
 
-const ProductCard = ({ product }: { product: ProductSummary }) => {
+type ProductCardProps = {
+  product: ProductSummary;
+  badge?: { label: string; className: string }; // replaces the product's own badge, e.g. "#1 BEST SELLER" (STEP 33)
+  details?: ReactNode; // replaces the stars line under the name (STEP 33)
+};
+
+const ProductCard = ({ product, badge, details }: ProductCardProps) => {
   const { addItem } = useCart();
   const { showToast } = useToast();
   const [imageError, setImageError] = useState(false);
 
   const soldOut = product.trackStock && product.stock === 0;
   const link = `/product/${product.slug}`;
+  // The badge to show: the one given by the row, or the product's own (SALE, TOP SELLER...), or none
+  const shownBadge =
+    badge ??
+    (product.badge
+      ? { label: product.badge, className: badgeColor(product.badge) }
+      : null);
   const imageUrl = product.images?.[0];
 
   const handleAdd = () => {
@@ -56,20 +72,20 @@ const ProductCard = ({ product }: { product: ProductSummary }) => {
             alt={product.name}
             loading="lazy" // the browser only downloads it when it's about to scroll into view
             onError={() => setImageError(true)}
-            className="aspect-[4/3] w-full object-contain p-3 transition-transform duration-300 group-hover:scale-105"
+            className="aspect-4/3 w-full object-contain p-3 transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
-          <span className="flex aspect-[4/3] flex-col items-center justify-center gap-2 text-muted">
+          <span className="flex aspect-4/3 flex-col items-center justify-center gap-2 text-muted">
             <MdOutlineImageNotSupported size={32} aria-hidden="true" />
             <span className="text-xs">Photo unavailable</span>
           </span>
         )}
 
-        {product.badge && (
+        {shownBadge && (
           <span
-            className={`absolute top-3 left-3 rounded-full px-2.5 py-1 text-[11px] leading-3.5 font-bold uppercase ${badgeColor(product.badge)}`}
+            className={`absolute top-3 left-3 rounded-full px-2.5 py-1 text-[11px] leading-3.5 font-bold uppercase ${shownBadge.className}`}
           >
-            {product.badge}
+            {shownBadge.label}
           </span>
         )}
       </Link>
@@ -87,11 +103,13 @@ const ProductCard = ({ product }: { product: ProductSummary }) => {
         </h3>
 
         <div className="mt-1.5">
-          <RatingStars
-            rating={product.ratings}
-            count={product.reviewCount}
-            size={15}
-          />
+          {details ?? (
+            <RatingStars
+              rating={product.ratings}
+              count={product.reviewCount}
+              size={15}
+            />
+          )}
         </div>
 
         <div className="mt-auto flex items-center justify-between gap-2 pt-3">
