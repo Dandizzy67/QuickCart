@@ -8,6 +8,8 @@ import accountRoutes from "./accountRoutes";
 import promoRoutes from "./promoRoutes";
 import reviewRoutes from "./reviewRoutes";
 import orderRoutes from "./orderRoutes";
+
+import newsletterRoutes from "./newsletterRoutes";
 // STEP 5: Join the routes and add a health check
 // One router joins all the route files. app.ts mounts it at /api, so a rout like e.g "/
 // products" becomes /api/products
@@ -24,6 +26,7 @@ router.use("/products", productRoutes); // /api/products...
 router.use("/account", accountRoutes); // /api/account...
 router.use("/promo-codes", promoRoutes); // /api/promo-codes...
 router.use("/reviews", reviewRoutes); // /api/reviews...
+router.use("/newsletter", newsletterRoutes); // /api/newsletter...
 
 router.use("/orders", orderRoutes); // /api/orders..
 
