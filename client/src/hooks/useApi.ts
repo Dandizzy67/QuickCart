@@ -6,7 +6,7 @@
 // STEP 30 (part 3): A hook for loading data
 
 import { useEffect, useState } from "react";
-import { api } from "../utils/api";
+import { api } from "../Utils/api";
 
 // The last answer, labelled with WHICH request it answers ("/categories#0")
 type Result<T> = { key: string; data?: T; error?: string };

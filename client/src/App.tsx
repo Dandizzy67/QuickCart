@@ -28,6 +28,8 @@ import AccountLayout from "./Layouts/AccountLayout";
 import AccountOverviewPage from "./pages/account/AccountOverviewPage";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import ProtectedRoute from "./components/auth/protectedRoute";
+
 function App() {
   return (
     <BrowserRouter>
@@ -43,27 +45,30 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
-          {/* pages that need a login: shoppers who are not logged in are sent to login first if they try to acess the page */}
-
           <Route path="/Verify-email" element={<VerifyEmailPage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
-          <Route
-            path="/Order-confirmation/:orderId"
-            element={<OrderCorfirmationPAge />}
-          />
-          {/* Account pages: account menu on the left */}
-          <Route path="/account" element={<AccountLayout />}>
-            <Route index element={<AccountOverviewPage />} />
-            <Route path="Orders" element={<OrderHistotyPage />} />
-            <Route path="addresses" element={<AddressesPage />} />
-            <Route path="saved" element={<SavedItemsPage />} />
-            <Route path="settings" element={<AccountSettingPage />} />
+
+          {/* Pages that need a login: shoppers who are not logged in are sent to login first if they try to acess the page */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/checkout" element={<CheckoutPage />} />
+            <Route
+              path="/Order-confirmation/:orderId"
+              element={<OrderCorfirmationPAge />}
+            />
+            {/* Account pages: account menu on the left */}
+            <Route path="/account" element={<AccountLayout />}>
+              <Route index element={<AccountOverviewPage />} />
+              <Route path="Orders" element={<OrderHistotyPage />} />
+              <Route path="addresses" element={<AddressesPage />} />
+              <Route path="saved" element={<SavedItemsPage />} />
+              <Route path="settings" element={<AccountSettingPage />} />
+            </Route>
+            {/* Order details is full width in the design, so it has no account menu */}
+            <Route
+              path="/account/orders/:orderId"
+              element={<OrderDetailsPage />}
+            />
           </Route>
-          {/* Order details is full width in the design, so it has no account menu */}
-          <Route
-            path="/account/orders/:orderId"
-            element={<OrderDetailsPage />}
-          />
+
           {/* SDHipping returns, FAQS, About, Terms, Privacy... (one route each, all using Info page) */}
           {/* {InfoPages.map((page) => {
             <Route
@@ -75,23 +80,23 @@ function App() {
 
           <Route path="*" element={<NotFoundPage />} />
         </Route>
+
         <Route path="/admin/login" element={<AdminLoginPage />} />
-        {/* Admin pages: admin menu + top bar, no store header or footer. */}
-        <Route>
-          <Route path="/admin/login" element={<AdminLoginPage />}>
+
+        {/* Admin pages: ... Only admins gets in. */}
+        <Route element={<ProtectedRoute adminOnly />}>
+          <Route path="/admin">
             <Route index element={<AdminDashboardPage />} />
             <Route path="products" element={<AdminProductsPage />} />
-            <Route path="products/new" element={<AdminProductsPage />} />
+            <Route path="products/new" element={<AdminProductsFormPage />} />
             <Route
-              path="Products/:productId/edit"
+              path="products/:productId/edit"
               element={<AdminProductsFormPage />}
             />
-
             <Route path="orders" element={<AdminOrdersPage />} />
             <Route path="customers" element={<AdminCustomersPage />} />
             <Route path="categories" element={<AdminCategoriesPage />} />
             <Route path="settings" element={<AdminSettingsPage />} />
-            <Route path="categories" element={<AdminCategoriesPage />} />
 
             {/* {Anything other than admin address shows the 404 page inside the admin layout} */}
             <Route path="*" element={<NotFoundPage />} />
