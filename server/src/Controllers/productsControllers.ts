@@ -19,6 +19,18 @@ dotenv.config({ quiet: true });
 export const CARD_FIELDS =
   "name slug description tagline priceNote images brand price oldPrice badge ratings reviewCount ratingCounts category";
 
+// Shared helpers — exported so reviews controller can reuse them
+// For page and limit: a whole number above 0, otherwise the fallback ("abc", "-3", "0" -> fallback)
+export const wholeNumber = (value: unknown, fallback: number) => {
+  const number = Math.floor(
+    Number(typeof value === "string" ? value.trim() : value),
+  );
+  return number > 0 ? number : fallback;
+};
+
+// A MongoDB id is exactly 24 characters of 0-9 and a-f
+export const OBJECT_ID = /^[a-f0-9]{24}$/i;
+
 export const getProducts = async (_req: Request, res: Response) => {
   const query = liveProducts() as any;
 

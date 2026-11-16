@@ -12,6 +12,7 @@ import { demoCategories, demoProducts, demoUsers } from "./Demodata";
 import { products } from "./product";
 import { PromoCode } from "../models/promoCodes";
 import { promoCodes } from "./promoCodes";
+import { Review } from "../models/Reviews";
 
 import { Order } from "../models/order";
 import { Counter } from "../models/counter";
@@ -28,6 +29,7 @@ export const seedDatabase = async () => {
     User.deleteMany({}),
     PromoCode.deleteMany({}),
     Counter.deleteMany({}), // so the next order is #QC-1042 again
+    Review.deleteMany({}),
   ]);
 
   // 2. Save the categories, then remember each one's id by slug: "electronics" -> ObjectId(...)
