@@ -22,6 +22,7 @@ import {
 } from "../Controllers/adminProductController";
 import { adminOnly, protect } from "../middleware/auth";
 import { uploadPhotos } from "../middleware/upload";
+import { getDashboard } from "../Controllers/adminDashboardController";
 
 const router = Router();
 
@@ -44,5 +45,7 @@ router.get("/categories", getAdminCategories);
 router.post("/categories", createCategory);
 router.patch("/categories/:id", updateCategory);
 router.delete("/categories/:id", deleteCategory);
+// Dashboard (STEP 27)
+router.get("/dashboard", getDashboard);
 
 export default router;
