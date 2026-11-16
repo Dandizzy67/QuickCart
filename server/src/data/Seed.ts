@@ -13,16 +13,21 @@ import { products } from "./product";
 import { PromoCode } from "../models/promoCodes";
 import { promoCodes } from "./promoCodes";
 
+import { Order } from "../models/order";
+import { Counter } from "../models/counter";
+
 // STEP 13: the seed command
 // seedDatabase() does the work and is exported,
 
 export const seedDatabase = async () => {
   // 1. Empty the collections (both at the same time with Promise.all)
   await Promise.all([
+    Order.deleteMany({}),
     Category.deleteMany({}),
     Product.deleteMany({}),
     User.deleteMany({}),
     PromoCode.deleteMany({}),
+    Counter.deleteMany({}), // so the next order is #QC-1042 again
   ]);
 
   // 2. Save the categories, then remember each one's id by slug: "electronics" -> ObjectId(...)
