@@ -17,7 +17,7 @@ dotenv.config({ quiet: true });
 // Next: STEP 2 (Connect to MongoDB) -> server/src/config/database.ts
 
 export const CARD_FIELDS =
-  "name slug description tagline priceNote images brand price oldPrice badge ratings reviewCount ratingCounts category";
+  "name slug description tagline priceNote images brand price oldPrice badge ratings reviewCount ratingCounts category tags trackStock stock sold flashSaleStock colors";
 
 // Shared helpers — exported so reviews controller can reuse them
 // For page and limit: a whole number above 0, otherwise the fallback ("abc", "-3", "0" -> fallback)

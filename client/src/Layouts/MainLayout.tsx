@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import NavBar from "../components/layout/NavBar";
 import Footer from "../components/layout/footer";
+import AddedToCartModal from "../components/product/AddedToCartModal";
 
 const MainLayout = () => {
   return (
@@ -10,6 +11,7 @@ const MainLayout = () => {
         <Outlet />
       </main>
       <Footer />
+      <AddedToCartModal />
     </>
   );
 };
