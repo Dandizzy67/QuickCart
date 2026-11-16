@@ -16,6 +16,7 @@ import { Review } from "../models/Reviews";
 
 import { Order } from "../models/order";
 import { Counter } from "../models/counter";
+import { createDemoOrders, demoShoppers } from "./demoOrders";
 
 // STEP 13: the seed command
 // seedDatabase() does the work and is exported,
@@ -94,12 +95,16 @@ export const seedDatabase = async () => {
   // 7. Save the promo codes (insertMany is fine here: promo codes have no save hooks)
   const savedPromoCodes = await PromoCode.insertMany(promoCodes);
 
-  // 8. A summary for whoever ran the seed
+  // 8. Demo orders (STEP 28): 4 more shoppers and ~40 orders, so the dashboard and Order History have data
+  const demoOrderCount = await createDemoOrders(saveProducts);
+
+  // 9. A summary for whoever ran the seed
   return {
     categories: savedCategories.length,
     products: saveProducts.length,
-    users: savedUsers.length,
+    users: savedUsers.length + demoShoppers.length,
     promoCodes: savedPromoCodes.length,
+    orders: demoOrderCount,
     withoutPhotos: saveProducts
       .filter((product) => {
         return product.images.length === 0;
@@ -117,7 +122,7 @@ const main = async () => {
     const result = await seedDatabase();
 
     console.log(
-      `Seeded ${result.categories} categories, ${result.products} products, ${result.users} users and ${result.promoCodes} promo codes`,
+      `Seeded ${result.categories} categories, ${result.products} products, ${result.users} users, ${result.promoCodes} promo codes and ${result.orders} demo orders`,
     );
 
     if (result.withoutPhotos.length > 0) {

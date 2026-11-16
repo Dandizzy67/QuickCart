@@ -23,6 +23,7 @@ import {
 import { adminOnly, protect } from "../middleware/auth";
 import { uploadPhotos } from "../middleware/upload";
 import { getDashboard } from "../Controllers/adminDashboardController";
+import { advanceOrders, resetDemo } from "../Controllers/demControllers";
 
 const router = Router();
 
@@ -47,5 +48,9 @@ router.patch("/categories/:id", updateCategory);
 router.delete("/categories/:id", deleteCategory);
 // Dashboard (STEP 27)
 router.get("/dashboard", getDashboard);
+
+// Demo panel (STEP 28)
+router.post("/demo/reset", resetDemo);
+router.post("/demo/advance-orders", advanceOrders);
 
 export default router;
