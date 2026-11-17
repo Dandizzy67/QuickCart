@@ -1,6 +1,6 @@
 import { MdOutlineLocalShipping } from "react-icons/md";
 import { Link } from "react-router-dom";
-import HeroImg from "../../assets/images/createdlifestyle.jpeg";
+import HeroImg from "../../assets/images/curated lifestyle essentials.png";
 // The three quick facts under the buttons
 const stats = [
   { value: "30-min", label: "Express dispatch" },

@@ -12,8 +12,6 @@ import { useState } from "react";
 import type { ReactNode } from "react";
 import { MdOutlineImageNotSupported } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { useCart } from "../../context/cartContext";
-import { useToast } from "../../context/toastContext";
 import type { ProductSummary } from "../../types/api";
 import Price from "../common/Price";
 import RatingStars from "../common/RatingStars";
@@ -33,8 +31,6 @@ type ProductCardProps = {
 };
 
 const ProductCard = ({ product, badge, details }: ProductCardProps) => {
-  const { addItem } = useCart();
-  const { showToast } = useToast();
   const [imageError, setImageError] = useState(false);
 
   const soldOut = product.trackStock && product.stock === 0;
@@ -46,19 +42,6 @@ const ProductCard = ({ product, badge, details }: ProductCardProps) => {
       ? { label: product.badge, className: badgeColor(product.badge) }
       : null);
   const imageUrl = product.images?.[0];
-
-  const handleAdd = () => {
-    // Quick add from a card takes the first colour. (The product page lets you choose, STEP 35.)
-    const result = addItem(product, { color: product.colors[0]?.name });
-    if (!result.ok) {
-      showToast({
-        type: "error",
-        title: "Couldn't add to cart",
-        message: result.message,
-      });
-    }
-    // When it works, the "Added to Cart!" pop-up opens by itself (it watches lastAdded in the cart)
-  };
 
   return (
     <article className="group flex w-full flex-col rounded-3xl bg-surface p-3 shadow-card transition-shadow hover:shadow-lift">
@@ -114,19 +97,24 @@ const ProductCard = ({ product, badge, details }: ProductCardProps) => {
 
         <div className="mt-auto flex items-center justify-between gap-2 pt-3">
           <Price price={product.price} oldPrice={product.oldPrice} />
-          <button
-            type="button"
-            onClick={handleAdd}
-            disabled={soldOut}
-            aria-label={
-              soldOut
-                ? `${product.name} is sold out`
-                : `Add ${product.name} to cart`
-            }
-            className="h-9 shrink-0 rounded-full bg-navy px-4 text-sm font-semibold text-white transition-colors hover:bg-primary disabled:cursor-not-allowed disabled:bg-line-soft disabled:text-muted"
-          >
-            {soldOut ? "Sold out" : "Add"}
-          </button>
+          {soldOut ? (
+            <button
+              type="button"
+              disabled
+              aria-label={`${product.name} is sold out`}
+              className="h-9 shrink-0 cursor-not-allowed rounded-full bg-line-soft px-4 text-sm font-semibold text-muted"
+            >
+              Sold out
+            </button>
+          ) : (
+            <Link
+              to={link}
+              aria-label={`View ${product.name} options before adding to cart`}
+              className="inline-flex h-9 shrink-0 items-center justify-center rounded-full bg-navy px-4 text-sm font-semibold text-white transition-colors hover:bg-primary"
+            >
+              Add
+            </Link>
+          )}
         </div>
       </div>
     </article>
