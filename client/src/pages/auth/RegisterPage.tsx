@@ -25,13 +25,11 @@ import PasswordStrength from "../../components/form/PasswordStrenght";
 import TextInput from "../../components/form/TextInput";
 import { useAuth } from "../../context/authContext";
 import { api } from "../../Utils/api";
+import { toInternational } from "../../Utils/nigeria";
 import { isPasswordValid } from "../../Utils/password";
 
 const EMAIL_RULE = /^\S+@\S+\.\S+$/;
 
-// "0803 123 4567" -> "+2348031234567" (the format the server and Brevo understand). The leading 0 goes.
-const toInternational = (phone: string) =>
-  `+234${phone.replace(/\D/g, "").replace(/^0/, "")}`;
 // A Nigerian mobile number: 10 digits after +234 (0803 123 4567 = 11 digits with the 0)
 const isPhoneValid = (phone: string) =>
   /^\d{10}$/.test(phone.replace(/\D/g, "").replace(/^0/, ""));
