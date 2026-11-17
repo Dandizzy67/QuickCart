@@ -16,7 +16,7 @@ import type {
 } from "../../types/api";
 import Pagination from "../common/pagination";
 import RatingStars from "../common/RatingStars";
-import ReviewForm from "./ReviewForm";
+import ReviewForm from "./ReviewForm.tsx";
 
 type ProductReviewsProps = {
   product: Product;
