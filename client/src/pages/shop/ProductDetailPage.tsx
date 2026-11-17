@@ -6,7 +6,7 @@
 
 import { useEffect, useState } from "react";
 import { MdArrowForward, MdSearchOff } from "react-icons/md";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import Breadcrumb from "../../components/common/Breadcrumb";
 import EmptyState from "../../components/common/EmptyState";
 import SectionHeader from "../../components/common/SectionHeader";
@@ -26,16 +26,19 @@ import { addRecentlyViewed } from "../../Utils/recentlyViewed";
 const ProductDetailsPage = () => {
   // App.tsx calls it :productId, but it can be the slug or the id (the server accepts both)
   const { productId = "" } = useParams();
+  const location = useLocation();
   const { data, error, reload } = useApi<ProductResponse>(
     `/products/${productId}`,
   );
-  const [tab, setTab] = useState<TabName>("specs");
+  // "Leave Review" links (Order History, STEP 40) end with #reviews: open on the Reviews tab
+  const firstTab: TabName = location.hash === "#reviews" ? "reviews" : "specs";
+  const [tab, setTab] = useState<TabName>(firstTab);
   // Another product opened (e.g. from Related Products): back to the first tab. The page itself stays on screen
   // (only the address changed), so its state is reset by hand, the same "follow a value" pattern as the Shop search.
   const [tabFor, setTabFor] = useState(productId);
   if (tabFor !== productId) {
     setTabFor(productId);
-    setTab("specs");
+    setTab(firstTab);
   }
 
   // The previous product stays in "data" while the next one loads (STEP 30): only use it if it's the one in the address
@@ -43,6 +46,16 @@ const ProductDetailsPage = () => {
     data && (data.product.slug === productId || data.product._id === productId)
       ? data.product
       : null;
+
+  // ...and scroll down to it once the product has loaded
+  const loadedId = product?._id;
+  useEffect(() => {
+    if (loadedId && location.hash === "#reviews") {
+      document
+        .getElementById("product-tabs")
+        ?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [loadedId, location.hash]);
 
   // When a product opens: remember it for "Recently Viewed", and show its name in the browser tab
   useEffect(() => {
