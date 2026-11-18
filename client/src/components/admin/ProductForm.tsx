@@ -26,6 +26,7 @@ import type {
   ProductStatus,
 } from "../../types/admin";
 import { api } from "../../Utils/api";
+import { announceCountsChanged } from "../../utils/adminEvents";
 import RadioCard from "../form/RadioCard";
 import SelectInput from "../form/SelectInput";
 import TextArea from "../form/TextArea";
@@ -295,6 +296,7 @@ const ProductForm = ({ product, categories }: ProductFormProps) => {
         title: product ? "Product updated successfully" : "Product created",
         message,
       });
+      announceCountsChanged(); // the menu's "Products 40" (STEP 43)
       navigate("/admin/products");
     } catch (err) {
       setServerError((err as Error).message); // e.g. "That sku is already in use."
@@ -310,6 +312,7 @@ const ProductForm = ({ product, categories }: ProductFormProps) => {
         { method: "DELETE" },
       );
       showToast({ type: "success", title: message });
+      announceCountsChanged();
       navigate("/admin/products");
     } catch (err) {
       showToast({
