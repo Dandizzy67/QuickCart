@@ -27,7 +27,6 @@ const HomePage = () => {
       <RecommendedForYou />
       <Testimonials />
       <NewsletterBanner />
-      <RecommendedForYou />
       <RecentlyViewed />
     </div>
   );

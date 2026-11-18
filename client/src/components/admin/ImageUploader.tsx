@@ -6,7 +6,7 @@
 
 import { useRef, useState, type ChangeEvent } from "react";
 import { MdAddPhotoAlternate, MdDeleteOutline, MdOutlineVerified, MdStar } from "react-icons/md";
-import { api } from "../../utils/api";
+import { api } from "../../Utils/api";
 
 const MAX_PHOTOS = 5; // the server's limits (server/src/middleware/upload.ts)
 const MAX_MB = 5;

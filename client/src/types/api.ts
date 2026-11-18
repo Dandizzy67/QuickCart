@@ -86,12 +86,12 @@ export type ProductsResponse = {
 // STEP 35: One product, and its reviews (server: productController.ts getProduct, reviewController.ts)
 
 export type ProductSpec = { group: string; label: string; value: string }; // a row of "Full Specifications"
-export type ProductHighlight = { icon: string; title: string; text: string }; // the 3 feature cards
+export type ProductHighlight = { icon?: string; title: string; text: string }; // the 3 feature cards
 
 // GET /api/products/:idOrSlug -> { product }: everything for the Product Details page
 export type Product = ProductSummary & {
   description: string;
-  features: string[]; // the ✓ bullet points
+  features?: string[]; // the ✓ bullet points (some products may not have them)
   specs: ProductSpec[];
   highlights: ProductHighlight[];
   sku: string;

@@ -5,7 +5,7 @@
 
 // STEP 38 (part 10): The Checkout page
 
-import { useEffect, useState, type ComponentType } from "react";
+import { useEffect, useState } from "react";
 import { MdOutlineRemoveShoppingCart, MdVerifiedUser } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import CheckOUTSummary from "../../components/checkout/CheckOutSummary";
@@ -33,7 +33,7 @@ import {
 
 const EMAIL_RULE = /^\S+@\S+\.\S+$/;
 const EXPRESS_FEE = 2500; // the server's price (DELIVERY_OPTIONS, server STEP 22); the server charges its own anyway
-const CheckoutSummary = CheckOUTSummary as ComponentType<any>;
+const CheckoutSummary = CheckOUTSummary;
 
 const CheckoutPage = () => {
   const { user } = useAuth();

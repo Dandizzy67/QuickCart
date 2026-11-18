@@ -1,5 +1,1 @@
-const AccountLayout = () => {
-  return <div>AccountLayout</div>;
-};
-
-export default AccountLayout;
+export { default } from "../components/layout/AccountLayout";

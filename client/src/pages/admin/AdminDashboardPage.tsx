@@ -238,7 +238,7 @@ const AdminDashboardPage = () => {
           </section>
 
           <div className="grid items-start gap-6 xl:grid-cols-[1fr_380px]">
-            <RecentOrdersTable />
+            <RecentOrdersTable orders={data.recentOrders} />
             <div className="flex flex-col gap-6">
               <TopProducts products={data.topProducts} />
               <LowStockAlerts

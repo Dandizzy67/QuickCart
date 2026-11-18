@@ -49,11 +49,9 @@ const AddressesPage = () => {
       {editing !== null ? (
         <AddressForm
           key={editing}
-          {...({
-            address: user.addresses.find((address) => address._id === editing),
-            onDone: done,
-            onCancel: () => setEditing(null),
-          } as any)}
+          address={user.addresses.find((address) => address._id === editing)}
+          onDone={done}
+          onCancel={() => setEditing(null)}
         />
       ) : user.addresses.length === 0 ? (
         <EmptyState

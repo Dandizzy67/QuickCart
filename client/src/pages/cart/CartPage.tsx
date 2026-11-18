@@ -1,5 +1,1 @@
-const CartPage = () => {
-  return <div>CartPage</div>;
-};
-
-export default CartPage;
+export { default } from "../../components/cart/cartPage";

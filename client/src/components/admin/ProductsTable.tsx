@@ -11,12 +11,12 @@ import {
   MdOutlineImageNotSupported,
 } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { useToast } from "../../context/ToastContext";
+import { useToast } from "../../context/toastContext";
 import type { AdminProductRow } from "../../types/admin";
-import { announceCountsChanged } from "../../utils/adminEvents";
-import { api } from "../../utils/api";
-import { shortDate } from "../../utils/dates";
-import { naira } from "../../utils/format";
+import { announceCountsChanged } from "../../Utils/adminEvents";
+import { api } from "../../Utils/api";
+import { shortDate } from "../../Utils/dates";
+import { naira } from "../../Utils/format";
 
 // The small note under the SKU, depending on the product
 const noteFor = (product: AdminProductRow) => {

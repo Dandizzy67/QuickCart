@@ -79,5 +79,5 @@ const highlightIcons: Record<string, IconType> = {
 };
 
 // A name we don't know (e.g. a new product from the admin, STEP 42) gets a tick
-export const getHighlightIcon = (name: string): IconType =>
-  highlightIcons[name] ?? MdOutlineVerified;
+export const getHighlightIcon = (name?: string): IconType =>
+  name ? (highlightIcons[name] ?? MdOutlineVerified) : MdOutlineVerified;

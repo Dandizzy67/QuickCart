@@ -5,8 +5,10 @@
 import dotenv from "dotenv";
 import { Request, Response } from "express";
 import { isValidObjectId } from "mongoose";
+import { Category } from "../models/Category";
 import { Product, liveProducts } from "../models/Products";
 import { AppError } from "../utils/apperror";
+import { escapeRegex } from "../utils/escapeRegex";
 
 dotenv.config({ quiet: true });
 
@@ -31,15 +33,67 @@ export const wholeNumber = (value: unknown, fallback: number) => {
 // A MongoDB id is exactly 24 characters of 0-9 and a-f
 export const OBJECT_ID = /^[a-f0-9]{24}$/i;
 
-export const getProducts = async (_req: Request, res: Response) => {
-  const query = liveProducts() as any;
+const text = (value: unknown) =>
+  typeof value === "string" ? value.trim() : "";
 
-  const products = await Product.find(query)
-    .select(CARD_FIELDS)
-    .populate("category", "name slug")
-    .lean();
+const SORTS: Record<string, Record<string, 1 | -1>> = {
+  featured: { sold: -1, _id: 1 },
+  newest: { createdAt: -1, _id: -1 },
+  "price-asc": { price: 1, _id: 1 },
+  "price-desc": { price: -1, _id: 1 },
+  rating: { ratings: -1, reviewCount: -1, _id: 1 },
+  "best-selling": { sold: -1, _id: 1 },
+};
 
-  res.json({ products });
+export const getProducts = async (req: Request, res: Response) => {
+  const conditions: Record<string, unknown>[] = [liveProducts()];
+
+  const search = text(req.query.search);
+  if (search) {
+    const pattern = new RegExp(escapeRegex(search), "i");
+    const matchingCategories = await Category.find({
+      $or: [{ name: pattern }, { slug: pattern }],
+    })
+      .select("_id")
+      .lean();
+
+    conditions.push({
+      $or: [
+        { name: pattern },
+        { brand: pattern },
+        { tags: pattern },
+        { category: { $in: matchingCategories.map((category) => category._id) } },
+      ],
+    });
+  }
+
+  const categorySlug = text(req.query.category).toLowerCase();
+  if (categorySlug) {
+    const category = await Category.findOne({ slug: categorySlug })
+      .select("_id")
+      .lean();
+    conditions.push({ category: category?._id ?? null });
+  }
+
+  const tag = text(req.query.tag).toLowerCase();
+  if (tag) conditions.push({ tags: tag });
+
+  const filter = { $and: conditions };
+  const sort = SORTS[text(req.query.sort)] ?? SORTS.featured;
+  const limit = Math.min(wholeNumber(req.query.limit, 100), 100);
+  const page = wholeNumber(req.query.page, 1);
+  const [products, total] = await Promise.all([
+    Product.find(filter)
+      .select(CARD_FIELDS)
+      .populate("category", "name slug")
+      .sort(sort)
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .lean(),
+    Product.countDocuments(filter),
+  ]);
+
+  res.json({ products, total, page, pages: Math.ceil(total / limit) });
 };
 
 export const getProduct = async (
@@ -60,6 +114,16 @@ export const getProduct = async (
 
   const product = await Product.findOne(query)
     .populate("category", "name slug")
+    .populate({
+      path: "bundleProducts",
+      select: CARD_FIELDS,
+      populate: { path: "category", select: "name slug" },
+    })
+    .populate({
+      path: "relatedProducts",
+      select: CARD_FIELDS,
+      populate: { path: "category", select: "name slug" },
+    })
     .lean();
 
   if (!product) {

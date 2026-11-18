@@ -8,7 +8,7 @@ import {
 const trustItems = [
   {
     title: "Free Delivery",
-    text: "Orders above ₦50,000",
+    text: "Standard delivery on every order",
     icon: MdOutlineLocalShipping,
     tile: "bg-primary-light text-primary",
   },

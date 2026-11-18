@@ -151,9 +151,9 @@ const ProductInfo = ({ product, onShowReviews }: ProductInfoProps) => {
         {product.description}
       </p>
 
-      {product.features.length > 0 && (
+      {(product.features?.length ?? 0) > 0 && (
         <ul className="mt-4 grid gap-x-4 gap-y-1.5 border-b border-line pb-5 sm:grid-cols-2">
-          {product.features.map((feature) => (
+          {product.features?.map((feature) => (
             <li
               key={feature}
               className="flex items-center gap-2 text-sm text-ink-soft"
