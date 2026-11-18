@@ -82,7 +82,12 @@ export type AdminProductRow = {
   updatedAt: string;
 };
 
-export type AdminProductTab = "all" | "in-stock" | "low-stock" | "out-of-stock" | "drafts";
+export type AdminProductTab =
+  | "all"
+  | "in-stock"
+  | "low-stock"
+  | "out-of-stock"
+  | "drafts";
 
 export type AdminProductsResponse = {
   products: AdminProductRow[];
@@ -102,14 +107,30 @@ export type AdminProductDetail = Omit<AdminProductRow, "category"> & {
 };
 
 // GET /api/admin/categories -> every category, counting drafts too
-export type AdminCategory = { _id: string; name: string; slug: string; icon: string; productCount: number };
+export type AdminCategory = {
+  _id: string;
+  name: string;
+  slug: string;
+  icon: string;
+  productCount: number;
+};
 
 // STEP 43: Admin orders (server: adminOrderController.ts, STEP 26)
 
 export type AdminOrderTab = "all" | OrderStatus;
 
 // One row of GET /api/admin/orders (the server's TABLE_FIELDS)
-export type AdminOrderRow = Pick<Order, "_id" | "orderNumber" | "waybill" | "courier" | "contact" | "total" | "status" | "createdAt"> & {
+export type AdminOrderRow = Pick<
+  Order,
+  | "_id"
+  | "orderNumber"
+  | "waybill"
+  | "courier"
+  | "contact"
+  | "total"
+  | "status"
+  | "createdAt"
+> & {
   shippingAddress: { city: string; state: string };
   items: { name: string; image: string; quantity: number }[];
   payment: Pick<Order["payment"], "method" | "status" | "cardBrand">;
@@ -128,7 +149,15 @@ export type AdminOrdersResponse = {
 
 // GET /api/admin/orders/:orderNumber -> the order with its customer's account, and the buttons it may have
 export type AdminOrderResponse = {
-  order: Order & { user: { _id: string; firstName: string; lastName: string; email: string; createdAt: string } | null };
+  order: Order & {
+    user: {
+      _id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      createdAt: string;
+    } | null;
+  };
   nextStatuses: OrderStatus[]; // where it may go next, e.g. ["shipped", "cancelled"]
   couriers: string[];
 };
@@ -149,10 +178,18 @@ export type AdminCustomerRow = {
   lastOrderAt: string | null;
 };
 
-export type AdminCustomersResponse = { customers: AdminCustomerRow[]; total: number; page: number; pages: number };
+export type AdminCustomersResponse = {
+  customers: AdminCustomerRow[];
+  total: number;
+  page: number;
+  pages: number;
+};
 
 // GET /api/admin/customers/:id -> the customer, their addresses and their 20 newest orders
 export type AdminCustomerResponse = {
   customer: AdminCustomerRow & { addresses: Address[] };
-  orders: (Pick<Order, "_id" | "orderNumber" | "total" | "status" | "createdAt"> & { items: { quantity: number }[] })[];
+  orders: (Pick<
+    Order,
+    "_id" | "orderNumber" | "total" | "status" | "createdAt"
+  > & { items: { quantity: number }[] })[];
 };

@@ -26,7 +26,7 @@ import type {
   ProductStatus,
 } from "../../types/admin";
 import { api } from "../../Utils/api";
-import { announceCountsChanged } from "../../utils/adminEvents";
+import { announceCountsChanged } from "../../Utils/adminEvents";
 import RadioCard from "../form/RadioCard";
 import SelectInput from "../form/SelectInput";
 import TextArea from "../form/TextArea";

@@ -20,7 +20,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
 import { useApi } from "../../hooks/useApi";
 import type { AdminOrderCounts } from "../../types/admin";
-import { COUNTS_CHANGED } from "../../utils/adminEvents";
+import { COUNTS_CHANGED } from "../../Utils/adminEvents";
 import AdminBrand from "../admin/AdminBrand";
 
 type AdminSidebarProps = { onNavigate?: () => void }; // the phone menu closes itself after a click

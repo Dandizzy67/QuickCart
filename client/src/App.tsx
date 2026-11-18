@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import CategoriesPage from "./pages/shop/CategoriesPage";
 import ShopPage from "./pages/shop/shopPage";
@@ -17,24 +18,28 @@ import SavedItemsPage from "./pages/account/SavedItemsPages";
 import AccountSettingPage from "./pages/account/AccountSettingsPage";
 import OrderDetailsPage from "./pages/account/OrderDetailsPage";
 import AdminLoginPage from "./pages/admin/AdminLoginPage";
-import AdminProductsPage from "./pages/admin/AdminProductPage";
-import AdminProductsFormPage from "./pages/admin/AdminProductsFormPage";
-import AdminOrdersPage from "./pages/admin/AdminOrdersPage";
-import AdminCustomersPage from "./pages/admin/AdminCustomerPage";
-import AdminCategoriesPage from "./pages/admin/AdminCategoryPage";
-import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
 import MainLayout from "./Layouts/MainLayout";
 import AccountLayout from "./Layouts/AccountLayout";
 import AdminLayout from "./Layouts/AdminLayout";
 import AccountOverviewPage from "./pages/account/AccountOverviewPage";
-import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ProtectedRoute from "./components/auth/protectedRoute";
+import InfoPage from "./pages/infoPages";
+import { infoPages } from "./Utils/infoPages";
+
+const AdminDashboardPage = lazy(() => import("./pages/admin/AdminDashboardPage"));
+const AdminProductsPage = lazy(() => import("./pages/admin/AdminProductPage"));
+const AdminProductsFormPage = lazy(() => import("./pages/admin/AdminProductsFormPage"));
+const AdminOrdersPage = lazy(() => import("./pages/admin/AdminOrdersPage"));
+const AdminCustomersPage = lazy(() => import("./pages/admin/AdminCustomerPage"));
+const AdminCategoriesPage = lazy(() => import("./pages/admin/AdminCategoryPage"));
+const AdminSettingsPage = lazy(() => import("./pages/admin/AdminSettingsPage"));
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
+      <Suspense fallback={<div aria-busy="true" className="min-h-screen bg-page" />}>
+        <Routes>
         {/* {Everyone can access } */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<HomePage />} />
@@ -73,14 +78,14 @@ function App() {
             />
           </Route>
 
-          {/* SDHipping returns, FAQS, About, Terms, Privacy... (one route each, all using Info page) */}
-          {/* {InfoPages.map((page) => {
+          {/* Shipping, returns, FAQs, About, Terms, Privacy... */}
+          {infoPages.map((page) => (
             <Route
               key={page.path}
               path={page.path}
-              element={<InfoPages page={page} />}
-            />;
-          })} */}
+              element={<InfoPage page={page} />}
+            />
+          ))}
 
           <Route path="*" element={<NotFoundPage />} />
         </Route>
@@ -106,7 +111,8 @@ function App() {
             <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Route>
-      </Routes>
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }

@@ -11,7 +11,7 @@ import { MdCheckCircleOutline, MdClose, MdLocalShipping, MdOutlineCancel } from 
 import { useToast } from "../../context/toastContext";
 import { useApi } from "../../hooks/useApi";
 import type { AdminOrderResponse } from "../../types/admin";
-import { announceCountsChanged } from "../../utils/adminEvents";
+import { announceCountsChanged } from "../../Utils/adminEvents";
 import { api } from "../../Utils/api";
 import { shortDate, shortDateTime } from "../../Utils/dates";
 import { naira } from "../../Utils/format";

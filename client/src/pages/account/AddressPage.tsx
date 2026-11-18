@@ -7,7 +7,7 @@
 import { useState, type ComponentType } from "react";
 import { MdAdd, MdOutlineWrongLocation } from "react-icons/md";
 import AddressCard from "../../components/account/AddressCard";
-import AddressForm from "../../components/account/AddressForm";
+import AddressForm from "../../components/account/AdressForm";
 import EmptyState from "../../components/common/EmptyState";
 import { useAuth } from "../../context/authContext";
 import { useToast } from "../../context/toastContext";
