@@ -116,7 +116,7 @@ const FlashDealCard = ({ product }: { product: ProductSummary }) => {
         className="mt-4 flex h-11 items-center justify-center gap-2 rounded-xl bg-navy text-base font-medium text-white transition-colors hover:bg-primary disabled:cursor-not-allowed disabled:bg-line-soft disabled:text-muted"
       >
         <MdOutlineAddShoppingCart size={18} aria-hidden="true" />
-        {soldOut ? "Sold out" : "Quick Add"}
+        {soldOut ? "Sold out" : "ADD"}
       </button>
     </article>
   );
