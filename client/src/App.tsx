@@ -25,6 +25,7 @@ import AdminCategoriesPage from "./pages/admin/AdminCategoryPage";
 import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
 import MainLayout from "./Layouts/MainLayout";
 import AccountLayout from "./Layouts/AccountLayout";
+import AdminLayout from "./Layouts/AdminLayout";
 import AccountOverviewPage from "./pages/account/AccountOverviewPage";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -88,7 +89,7 @@ function App() {
 
         {/* Admin pages: ... Only admins gets in. */}
         <Route element={<ProtectedRoute adminOnly />}>
-          <Route path="/admin">
+          <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboardPage />} />
             <Route path="products" element={<AdminProductsPage />} />
             <Route path="products/new" element={<AdminProductsFormPage />} />
